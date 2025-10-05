@@ -27,11 +27,11 @@ dist-check
 function install-system-requirements() {
     if { [ "${DISTRO}" == "ubuntu" ] || [ "${DISTRO}" == "debian" ]; }; then
         if [ ! -x "$(command -v curl)" ]; then
-            if { [ "${DISTRO}" == "ubuntu" ] || [ "${DISTRO}" == "debian" ]; }; then
-                apt-get update
-                apt-get install curl haveged -y
-            fi
+            apt-get update
+            apt-get install curl haveged -y
         fi
+        # Always install dbus-x11 requirement
+        apt-get install -y dbus-x11
     else
         echo "Error: ${DISTRO} not supported."
         exit
@@ -51,6 +51,8 @@ function install-chrome-headless() {
         apt-get install desktop-base -y
         apt-get install task-xfce-desktop -y
         apt-get install xscreensaver -y
+        # Ensure dbus-x11 is installed for X11 sessions
+        apt-get install -y dbus-x11
         echo "exec /etc/X11/Xsession /usr/bin/xfce4-session" >>/etc/chrome-remote-desktop-session
         curl ${chrome_remote_desktop_url} -o ${chrome_remote_desktop_local_path}
         dpkg --install ${chrome_remote_desktop_local_path}
