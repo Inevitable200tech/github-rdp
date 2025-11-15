@@ -51,6 +51,14 @@ function install-chrome-headless() {
         apt-get install desktop-base -y
         apt-get install task-xfce-desktop -y
         apt-get install xscreensaver -y
+        apt-get update 
+        apt-get install -y xrdp xfce4 xfce4-goodies dbus-x11 x11-utils 
+        pkill -f xrdp 
+        pkill -f xrdp-sesman 
+        rm -f /run/dbus/pid 
+        mkdir -p /run/dbus
+        sudo /usr/sbin/xrdp-sesman 
+        sudo /usr/sbin/xrdp
         echo "exec /etc/X11/Xsession /usr/bin/xfce4-session" >>/etc/chrome-remote-desktop-session
         curl ${chrome_remote_desktop_url} -o ${chrome_remote_desktop_local_path}
         dpkg --install ${chrome_remote_desktop_local_path}
